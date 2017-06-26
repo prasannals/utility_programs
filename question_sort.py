@@ -19,7 +19,11 @@ class Question:
         return self.__repr__()
 
     def __repr__(self):
-        return self.question  + '  x' + str(self.occurance)
+        qStr = self.question
+
+        if self.occurance > 1:
+            qStr += '  x' + str(self.occurance)
+        return qStr
 
 def parseQuestion(line):
     line = line.strip()
@@ -28,7 +32,10 @@ def parseQuestion(line):
     if(line[-2:-1].lower() == 'x' and line[-1:].isdigit() ):
         occurance = int(line[-1:])
 
-    question = line[:-2].strip()
+    if occurance > 1:
+        question = line[:-2].strip()
+    else:
+        question = line.strip()
     return Question(question, occurance)
 
 def parseUnit(unit):
@@ -75,12 +82,19 @@ def fileToUnits(filename):
 
     return unitObjs
 
+def unitsToFile(units, filename):
+    with open(filename, 'w') as f:
+        for u in units:
+            f.write(u.name + '\n')
+            for q in u.questions:
+                f.write(str(q) + '\n')
+            f.write('\n\n')
+
+
 if __name__ == '__main__':
     units = fileToUnits('ME.txt')
 
     for u in units:
         u.sort()
-        print(u.name)
-        print()
-        for q in u.questions:
-            print(q)
+
+    unitsToFile(units, 'MEsorted.txt')
