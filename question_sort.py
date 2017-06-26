@@ -6,6 +6,9 @@ class Unit:
     def addQuestion(self, question):
         self.questions.append(question)
 
+    def sort(self):
+        self.questions = sorted(self.questions, reverse = True, key= lambda q: q.occurance)
+
 
 class Question:
     def __init__(self, question, occurance):
@@ -74,7 +77,9 @@ def fileToUnits(filename):
 
 if __name__ == '__main__':
     units = fileToUnits('ME.txt')
+
     for u in units:
+        u.sort()
         print(u.name)
         print()
         for q in u.questions:
